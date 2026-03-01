@@ -1,0 +1,43 @@
+name: Chanomhub Flutter SDK CI/CD
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.11.0' # Matches pubspec.yaml constraint
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate Code (build_runner)
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
+      - name: Analyze Project
+        run: flutter analyze
+
+      - name: Run Tests
+        run: flutter test --coverage
+
+      # (Optional) You can add code coverage reporting here
+      # - name: Upload coverage to Codecov
+      #   uses: codecov/codecov-action@v3
+      #   with:
+      #     token: ${{ secrets.CODECOV_TOKEN }}
+      #     file: coverage/lcov.info
+
+      # Example: Build a release version for simulation (not needed for SDK but good for validation)
+      # - name: Build APK (Optional)
+      #   run: flutter build apk --debug
