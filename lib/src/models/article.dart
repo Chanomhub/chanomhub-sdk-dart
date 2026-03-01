@@ -5,6 +5,7 @@ part 'article.g.dart';
 
 @JsonSerializable()
 class Article {
+  @JsonKey(fromJson: toInt)
   final int id;
   final String title;
   final String slug;
@@ -25,6 +26,7 @@ class Article {
   final List<ImageObject> images;
   final Author author;
   final bool favorited;
+  @JsonKey(fromJson: toInt)
   final int favoritesCount;
   final String? sequentialCode;
   final List<Download>? downloads;
@@ -72,6 +74,7 @@ class Article {
 
 @JsonSerializable()
 class ArticleListItem {
+  @JsonKey(fromJson: toInt)
   final int id;
   final String title;
   final String slug;
@@ -81,12 +84,13 @@ class ArticleListItem {
   final String updatedAt;
   final String? mainImage;
   final String? coverImage;
+  @JsonKey(fromJson: toInt)
   final int favoritesCount;
   final bool? favorited;
   final String? status;
   final Engine? engine;
   final String? sequentialCode;
-  final Author author; // Map to the common Author model
+  final Author author;
   final List<NamedEntity>? tags;
   final List<NamedEntity>? platforms;
   final List<NamedEntity>? categories;

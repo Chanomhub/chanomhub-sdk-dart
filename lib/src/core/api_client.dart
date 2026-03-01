@@ -77,20 +77,37 @@ class ApiClient {
 
       final data = response.data;
       if (data == null) {
-        throw Exception('Empty response from GraphQL API');
+        throw const ChanomhubException('Empty response from GraphQL API');
       }
 
       if (data['errors'] != null && (data['errors'] as List).isNotEmpty) {
-        // Extract the first error message
         final errors = data['errors'] as List;
-        final message = errors.first['message']?.toString() ?? 'GraphQL Error';
-        throw ChanomhubException(message);
+        final firstError = errors.first as Map<String, dynamic>;
+        
+        String message = firstError['message']?.toString() ?? 'GraphQL Error';
+        String code = 'GRAPHQL_ERROR';
+        
+        // Extract detailed validation info if available
+        if (firstError['extensions'] != null) {
+            final extensions = firstError['extensions'] as Map<String, dynamic>;
+            if (extensions['code'] != null) {
+                code = extensions['code'].toString();
+            }
+            // For validation errors, append field details if present
+            if (extensions['invalidArgs'] != null) {
+                message += ' (Invalid args: ${extensions['invalidArgs']})';
+            }
+        }
+
+        throw ChanomhubException(message, code: code);
       }
 
       // Transform image URLs in the response data
       final transformedData = transformImageUrlsDeep(data['data'], _cdnUrl);
       return transformedData as Map<String, dynamic>?;
     } on DioException catch (e) {
+      // Re-throw if it's already our custom exception (from interceptor)
+      if (e is ChanomhubException) rethrow;
       throw _parseException(e);
     }
   }
@@ -139,8 +156,6 @@ class ApiClient {
   /// Attempts to extract a readable error message from the API response body.
   String? _extractErrorMessage(dynamic data) {
     if (data is Map<String, dynamic>) {
-      // Assuming typical JSON error patterns like {"message": "Invalid token"}
-      // or {"error": "Invalid token"}
       if (data.containsKey('message')) {
         return data['message'].toString();
       } else if (data.containsKey('error')) {

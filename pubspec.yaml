@@ -1,6 +1,6 @@
 name: chanomhub_flutter
 description: "Official Flutter SDK for Chanomhub API. Access articles, authentication, downloads, and automated image processing with imgproxy support."
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/Chanomhub/chanomhub-sdk-dart
 repository: https://github.com/Chanomhub/chanomhub-sdk-dart
 issue_tracker: https://github.com/Chanomhub/chanomhub-sdk-dart/issues

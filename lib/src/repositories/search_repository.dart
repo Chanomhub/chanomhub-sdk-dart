@@ -45,7 +45,7 @@ class SearchRepository {
     final fieldsQuery = buildFieldsQuery(preset: opts.preset, fields: opts.fields);
 
     final List<String> filterParts = [];
-    filterParts.add('q: "\${query.replaceAll('"', '"')}"');
+    filterParts.add('q: "\${query.replaceAll('"', '\\"')}"');
     if (opts.tag != null) filterParts.add('tag: "\${opts.tag}"');
     if (opts.platform != null) filterParts.add('platform: "\${opts.platform}"');
     if (opts.category != null) filterParts.add('category: "\${opts.category}"');
@@ -55,15 +55,15 @@ class SearchRepository {
     }
     if (opts.author != null) filterParts.add('author: "\${opts.author}"');
 
-    final filterArg = "filter: { ${filterParts.join(', ')} }";
+    final filterArg = "filter: { \${filterParts.join(', ')} }";
 
     final graphqlQuery = '''
       query SearchArticles {
         public {
-          articles($filterArg, limit: ${opts.limit}, offset: ${opts.offset}, status: PUBLISHED) {
-            $fieldsQuery
+          articles(\$filterArg, limit: \${opts.limit}, offset: \${opts.offset}, status: PUBLISHED) {
+            \$fieldsQuery
           }
-          articlesCount($filterArg)
+          articlesCount(\$filterArg)
         }
       }
     ''';
@@ -75,7 +75,7 @@ class SearchRepository {
 
     final publicData = response?['public'] ?? {};
     final List articlesList = publicData['articles'] ?? [];
-    final int articlesCount = publicData['articlesCount'] ?? 0;
+    final int articlesCount = toInt(publicData['articlesCount']);
 
     final items = articlesList
         .map((e) => ArticleListItem.fromJson(e as Map<String, dynamic>))

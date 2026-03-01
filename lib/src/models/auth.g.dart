@@ -13,7 +13,7 @@ UserDTO _$UserDTOFromJson(Map<String, dynamic> json) => UserDTO(
   bio: json['bio'] as String?,
   image: json['image'] as String?,
   backgroundImage: json['backgroundImage'] as String?,
-  points: json['points'] as num?,
+  points: toInt(json['points']),
   token: json['token'] as String?,
 );
 
@@ -31,7 +31,7 @@ Map<String, dynamic> _$UserDTOToJson(UserDTO instance) => <String, dynamic>{
 UserResponse _$UserResponseFromJson(Map<String, dynamic> json) => UserResponse(
   user: UserDTO.fromJson(json['user'] as Map<String, dynamic>),
   refreshToken: json['refreshToken'] as String?,
-  expiresIn: (json['expiresIn'] as num?)?.toInt(),
+  expiresIn: toInt(json['expiresIn']),
 );
 
 Map<String, dynamic> _$UserResponseToJson(UserResponse instance) =>
@@ -44,7 +44,7 @@ Map<String, dynamic> _$UserResponseToJson(UserResponse instance) =>
 TokenPairDTO _$TokenPairDTOFromJson(Map<String, dynamic> json) => TokenPairDTO(
   accessToken: json['accessToken'] as String,
   refreshToken: json['refreshToken'] as String,
-  expiresIn: (json['expiresIn'] as num).toInt(),
+  expiresIn: toInt(json['expiresIn']),
 );
 
 Map<String, dynamic> _$TokenPairDTOToJson(TokenPairDTO instance) =>

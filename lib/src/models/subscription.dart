@@ -1,10 +1,13 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'common.dart';
 
 part 'subscription.g.dart';
 
 @JsonSerializable()
 class Subscription {
+  @JsonKey(fromJson: toInt)
   final int id;
+  @JsonKey(fromJson: toInt)
   final int userId;
   final String planId;
   final String status;
@@ -40,8 +43,11 @@ class SubscriptionPlan {
   final String planId;
   final String name;
   final String? description;
+  @JsonKey(fromJson: toInt)
   final int pointsCost;
+  @JsonKey(fromJson: toInt)
   final int durationDays;
+  @JsonKey(fromJson: toInt)
   final int roleId;
   final bool isActive;
 

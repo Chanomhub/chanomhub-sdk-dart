@@ -11,9 +11,9 @@ PaginatedResponse<T> _$PaginatedResponseFromJson<T>(
   T Function(Object? json) fromJsonT,
 ) => PaginatedResponse<T>(
   items: (json['items'] as List<dynamic>).map(fromJsonT).toList(),
-  total: (json['total'] as num).toInt(),
-  page: (json['page'] as num).toInt(),
-  pageSize: (json['pageSize'] as num).toInt(),
+  total: toInt(json['total']),
+  page: toInt(json['page']),
+  pageSize: toInt(json['pageSize']),
 );
 
 Map<String, dynamic> _$PaginatedResponseToJson<T>(
@@ -27,7 +27,7 @@ Map<String, dynamic> _$PaginatedResponseToJson<T>(
 };
 
 Author _$AuthorFromJson(Map<String, dynamic> json) => Author(
-  id: (json['id'] as num?)?.toInt(),
+  id: toInt(json['id']),
   name: json['name'] as String,
   username: json['username'] as String?,
   bio: json['bio'] as String?,
@@ -47,7 +47,7 @@ Map<String, dynamic> _$AuthorToJson(Author instance) => <String, dynamic>{
 };
 
 Download _$DownloadFromJson(Map<String, dynamic> json) => Download(
-  id: (json['id'] as num).toInt(),
+  id: toInt(json['id']),
   name: json['name'] as String,
   url: json['url'] as String,
   isActive: json['isActive'] as bool,
@@ -83,7 +83,7 @@ Map<String, dynamic> _$OfficialDownloadSourceToJson(
 };
 
 Mod _$ModFromJson(Map<String, dynamic> json) => Mod(
-  id: (json['id'] as num).toInt(),
+  id: toInt(json['id']),
   name: json['name'] as String,
   description: json['description'] as String,
   creditTo: json['creditTo'] as String,

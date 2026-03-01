@@ -11,7 +11,7 @@ class ArticleFilter {
   final bool? favorited;
   final String? engine;
   final String? sequentialCode;
-  final String? q;
+  final String? query; // Renamed from q for better DX
 
   ArticleFilter({
     this.tag,
@@ -21,7 +21,7 @@ class ArticleFilter {
     this.favorited,
     this.engine,
     this.sequentialCode,
-    this.q,
+    this.query,
   });
 }
 
@@ -80,8 +80,8 @@ class ArticlesRepository {
     if (filter.sequentialCode != null) {
       parts.add('sequentialCode: "${filter.sequentialCode}"');
     }
-    if (filter.q != null) {
-      parts.add('q: "${filter.q!.replaceAll('"', '\\"')}"');
+    if (filter.query != null) {
+      parts.add('q: "${filter.query!.replaceAll('"', '\\"')}"');
     }
 
     if (parts.isEmpty) return '';
@@ -126,7 +126,7 @@ class ArticlesRepository {
     if (opts.filter != null) {
         final f = _buildFilterArg(opts.filter);
         if (f.isNotEmpty) {
-            countFilterArg = '(\${f.substring(0, f.length - 2)})'; // Remove trailing ', '
+            countFilterArg = '(${f.substring(0, f.length - 2)})'; // Remove trailing ', '
         }
     }
     
@@ -150,7 +150,7 @@ class ArticlesRepository {
 
     final publicData = response?['public'] ?? {};
     final List articlesList = publicData['articles'] ?? [];
-    final int articlesCount = publicData['articlesCount'] ?? 0;
+    final int articlesCount = toInt(publicData['articlesCount']);
     
     final items = articlesList
         .map((e) => ArticleListItem.fromJson(e as Map<String, dynamic>))
@@ -164,6 +164,68 @@ class ArticlesRepository {
       page: page,
       pageSize: opts.limit,
     );
+  }
+
+  /// Get single article by ID
+  Future<Article?> getById(
+    int id, {
+    ArticleQueryOptions? options,
+  }) async {
+    final opts = options ?? ArticleQueryOptions();
+    final fieldsQuery = buildFieldsQuery(preset: opts.preset, fields: opts.fields);
+
+    final query = '''
+      query GetArticleById(\$id: Int!) {
+        public {
+          article(id: \$id) {
+            $fieldsQuery
+          }
+        }
+      }
+    ''';
+
+    final response = await _apiClient.graphqlQuery(
+      query,
+      variables: {'id': id},
+      operationName: 'GetArticleById',
+    );
+
+    final articleData = response?['public']?['article'];
+    if (articleData == null) return null;
+    return Article.fromJson(articleData as Map<String, dynamic>);
+  }
+
+  /// Get single article by slug
+  Future<Article?> getBySlug(
+    String slug, {
+    ArticleQueryOptions? options,
+  }) async {
+    final opts = options ?? ArticleQueryOptions();
+    final fieldsQuery = buildFieldsQuery(preset: opts.preset, fields: opts.fields);
+
+    final query = '''
+      query GetArticleBySlug(\$slug: String!, \$language: String, \$version: String) {
+        public {
+          article(slug: \$slug, language: \$language, version: \$version) {
+            $fieldsQuery
+          }
+        }
+      }
+    ''';
+
+    final response = await _apiClient.graphqlQuery(
+      query,
+      variables: {
+        'slug': slug,
+        if (opts.language != null) 'language': opts.language,
+        if (opts.version != null) 'version': opts.version,
+      },
+      operationName: 'GetArticleBySlug',
+    );
+
+    final articleData = response?['public']?['article'];
+    if (articleData == null) return null;
+    return Article.fromJson(articleData as Map<String, dynamic>);
   }
 
   /// Get articles by tag
@@ -254,39 +316,6 @@ class ArticlesRepository {
     return articlesList
         .map((e) => ArticleListItem.fromJson(e as Map<String, dynamic>))
         .toList();
-  }
-
-  /// Get single article by slug
-  Future<Article?> getBySlug(
-    String slug, {
-    ArticleQueryOptions? options,
-  }) async {
-    final opts = options ?? ArticleQueryOptions();
-    final fieldsQuery = buildFieldsQuery(preset: opts.preset, fields: opts.fields);
-
-    final query = '''
-      query GetArticleBySlug(\$slug: String!, \$language: String, \$version: String) {
-        public {
-          article(slug: \$slug, language: \$language, version: \$version) {
-            $fieldsQuery
-          }
-        }
-      }
-    ''';
-
-    final response = await _apiClient.graphqlQuery(
-      query,
-      variables: {
-        'slug': slug,
-        if (opts.language != null) 'language': opts.language,
-        if (opts.version != null) 'version': opts.version,
-      },
-      operationName: 'GetArticleBySlug',
-    );
-
-    final articleData = response?['public']?['article'];
-    if (articleData == null) return null;
-    return Article.fromJson(articleData as Map<String, dynamic>);
   }
 
   /// Get article with versions

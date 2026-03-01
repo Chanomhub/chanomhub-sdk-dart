@@ -1,9 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'common.dart';
 
 part 'user.g.dart';
 
 @JsonSerializable()
 class User {
+  @JsonKey(fromJson: toInt)
   final int id;
   final String email;
   final String username;
@@ -38,6 +40,7 @@ class SocialMediaLink {
 
 @JsonSerializable()
 class Profile {
+  @JsonKey(fromJson: toInt)
   final int id;
   final String name;
   final String? username;

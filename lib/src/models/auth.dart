@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'common.dart';
 
 part 'auth.g.dart';
 
@@ -10,8 +11,9 @@ class UserDTO {
   final String? bio;
   final String? image;
   final String? backgroundImage;
-  final num? points;
-  final String? token; // In API docs this is sometimes present
+  @JsonKey(fromJson: toInt)
+  final int? points;
+  final String? token;
 
   UserDTO({
     required this.roles,
@@ -33,6 +35,7 @@ class UserDTO {
 class UserResponse {
   final UserDTO user;
   final String? refreshToken;
+  @JsonKey(fromJson: toInt)
   final int? expiresIn;
 
   UserResponse({required this.user, this.refreshToken, this.expiresIn});
@@ -46,6 +49,7 @@ class UserResponse {
 class TokenPairDTO {
   final String accessToken;
   final String refreshToken;
+  @JsonKey(fromJson: toInt)
   final int expiresIn;
 
   TokenPairDTO({

@@ -1,14 +1,18 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'article.dart';
+import 'common.dart';
 
 part 'sponsored_article.g.dart';
 
 @JsonSerializable()
 class SponsoredArticle {
+  @JsonKey(fromJson: toInt)
   final int id;
+  @JsonKey(fromJson: toInt)
   final int articleId;
   final String? coverImage;
   final bool isActive;
+  @JsonKey(fromJson: toInt)
   final int priority;
   final String startDate;
   final String? endDate;

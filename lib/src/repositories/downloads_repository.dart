@@ -1,4 +1,5 @@
 import '../core/api_client.dart';
+import '../models/common.dart';
 import '../models/download.dart';
 
 /// Repository for handling Download Link API calls.

@@ -1,11 +1,15 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'common.dart';
 
 part 'download.g.dart';
 
 @JsonSerializable()
 class DownloadLink {
+  @JsonKey(fromJson: toInt)
   final int id;
+  @JsonKey(fromJson: toInt)
   final int articleId;
+  @JsonKey(fromJson: toInt)
   final int? createdById;
   final String? name;
   final String url;
@@ -39,6 +43,7 @@ class DownloadLink {
 
 @JsonSerializable()
 class DownloadLinkCreator {
+  @JsonKey(fromJson: toInt)
   final int id;
   final String name;
 

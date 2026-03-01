@@ -2,11 +2,28 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'common.g.dart';
 
+/// Helper to safely parse int from dynamic values (String or num)
+int toInt(dynamic v) {
+  if (v == null) return 0;
+  if (v is num) return v.toInt();
+  return int.tryParse(v.toString()) ?? 0;
+}
+
+/// Helper to safely parse double from dynamic values (String or num)
+double buildToDouble(dynamic v) {
+  if (v == null) return 0.0;
+  if (v is num) return v.toDouble();
+  return double.tryParse(v.toString()) ?? 0.0;
+}
+
 @JsonSerializable(genericArgumentFactories: true)
 class PaginatedResponse<T> {
   final List<T> items;
+  @JsonKey(fromJson: toInt)
   final int total;
+  @JsonKey(fromJson: toInt)
   final int page;
+  @JsonKey(fromJson: toInt)
   final int pageSize;
 
   PaginatedResponse({
@@ -27,6 +44,7 @@ class PaginatedResponse<T> {
 
 @JsonSerializable()
 class Author {
+  @JsonKey(fromJson: toInt)
   final int? id;
   final String name;
   final String? username;
@@ -51,6 +69,7 @@ class Author {
 
 @JsonSerializable()
 class Download {
+  @JsonKey(fromJson: toInt)
   final int id;
   final String name;
   final String url;
@@ -93,6 +112,7 @@ class OfficialDownloadSource {
 
 @JsonSerializable()
 class Mod {
+  @JsonKey(fromJson: toInt)
   final int id;
   final String name;
   final String description;
