@@ -1,10 +1,11 @@
-## 1.0.0
+## 1.0.3
 
-- Initial release of the Chanomhub Flutter SDK.
-- Full support for GraphQL v2 queries with field selection (Presets).
-- Automated image processing with `imgproxy` URL generation.
-- Complete repositories for Articles, Auth, Users, Search, Favorites, Subscriptions, Downloads, and Mods.
-- Specialized models with JSON serialization support.
-- Comprehensive exception handling system.
-- GitHub Actions CI/CD workflow included.
-- Detailed documentation and example usage.
+- Fixed a bug where `toInt` and `toDouble` were not imported in some repositories.
+- Moved parsing utilities to a dedicated `parsers.dart` file for shared use.
+- Added `getMe()` method to `AuthRepository` for fetching the current user profile.
+- Improved string interpolation and escaping in `SearchRepository`.
+- Updated User-Agent version to 1.0.3.
+
+## 1.0.2
+
+- Initial release of the Chanomhub Flutter SDK. (Actually published as initial)

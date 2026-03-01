@@ -8,11 +8,11 @@ part of 'sponsored_article.dart';
 
 SponsoredArticle _$SponsoredArticleFromJson(Map<String, dynamic> json) =>
     SponsoredArticle(
-      id: toInt(json['id']),
-      articleId: toInt(json['articleId']),
+      id: (json['id'] as num).toInt(),
+      articleId: (json['articleId'] as num).toInt(),
       coverImage: json['coverImage'] as String?,
       isActive: json['isActive'] as bool,
-      priority: toInt(json['priority']),
+      priority: (json['priority'] as num).toInt(),
       startDate: json['startDate'] as String,
       endDate: json['endDate'] as String?,
       article: ArticleListItem.fromJson(

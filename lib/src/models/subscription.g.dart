@@ -7,8 +7,8 @@ part of 'subscription.dart';
 // **************************************************************************
 
 Subscription _$SubscriptionFromJson(Map<String, dynamic> json) => Subscription(
-  id: toInt(json['id']),
-  userId: toInt(json['userId']),
+  id: (json['id'] as num).toInt(),
+  userId: (json['userId'] as num).toInt(),
   planId: json['planId'] as String,
   status: json['status'] as String,
   currentPeriodStart: json['currentPeriodStart'] as String,
@@ -40,9 +40,9 @@ SubscriptionPlan _$SubscriptionPlanFromJson(Map<String, dynamic> json) =>
       planId: json['planId'] as String,
       name: json['name'] as String,
       description: json['description'] as String?,
-      pointsCost: toInt(json['pointsCost']),
-      durationDays: toInt(json['durationDays']),
-      roleId: toInt(json['roleId']),
+      pointsCost: (json['pointsCost'] as num).toInt(),
+      durationDays: (json['durationDays'] as num).toInt(),
+      roleId: (json['roleId'] as num).toInt(),
       isActive: json['isActive'] as bool,
     );
 

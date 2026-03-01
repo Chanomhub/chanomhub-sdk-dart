@@ -7,7 +7,7 @@ part of 'user.dart';
 // **************************************************************************
 
 User _$UserFromJson(Map<String, dynamic> json) => User(
-  id: toInt(json['id']),
+  id: (json['id'] as num).toInt(),
   email: json['email'] as String,
   username: json['username'] as String,
   bio: json['bio'] as String?,
@@ -34,7 +34,7 @@ Map<String, dynamic> _$SocialMediaLinkToJson(SocialMediaLink instance) =>
     <String, dynamic>{'platform': instance.platform, 'url': instance.url};
 
 Profile _$ProfileFromJson(Map<String, dynamic> json) => Profile(
-  id: toInt(json['id']),
+  id: (json['id'] as num).toInt(),
   name: json['name'] as String,
   username: json['username'] as String?,
   bio: json['bio'] as String?,

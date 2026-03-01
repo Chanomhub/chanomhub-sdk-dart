@@ -35,10 +35,8 @@ void main() {
   });
 
   group('ApiClient Error Handling Tests', () {
-    test('should parse 401 error into UnauthorizedException', () async {
-      // We can mock Dio responses later, but for now we'll just check if the custom
-      // exceptions are defined and exported correctly.
-      expect(const UnauthorizedException('test').statusCode, 401);
+    test('should parse 401 error into AuthenticationException', () async {
+      expect(const AuthenticationException('test').statusCode, 401);
     });
 
     test('should parse 404 error into NotFoundException', () async {

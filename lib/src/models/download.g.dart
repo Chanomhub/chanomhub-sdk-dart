@@ -7,9 +7,9 @@ part of 'download.dart';
 // **************************************************************************
 
 DownloadLink _$DownloadLinkFromJson(Map<String, dynamic> json) => DownloadLink(
-  id: toInt(json['id']),
-  articleId: toInt(json['articleId']),
-  createdById: toInt(json['createdById']),
+  id: (json['id'] as num).toInt(),
+  articleId: (json['articleId'] as num).toInt(),
+  createdById: (json['createdById'] as num?)?.toInt(),
   name: json['name'] as String?,
   url: json['url'] as String,
   isActive: json['isActive'] as bool,
@@ -40,7 +40,10 @@ Map<String, dynamic> _$DownloadLinkToJson(DownloadLink instance) =>
     };
 
 DownloadLinkCreator _$DownloadLinkCreatorFromJson(Map<String, dynamic> json) =>
-    DownloadLinkCreator(id: toInt(json['id']), name: json['name'] as String);
+    DownloadLinkCreator(
+      id: (json['id'] as num).toInt(),
+      name: json['name'] as String,
+    );
 
 Map<String, dynamic> _$DownloadLinkCreatorToJson(
   DownloadLinkCreator instance,

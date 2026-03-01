@@ -7,7 +7,7 @@ part of 'article.dart';
 // **************************************************************************
 
 Article _$ArticleFromJson(Map<String, dynamic> json) => Article(
-  id: toInt(json['id']),
+  id: (json['id'] as num).toInt(),
   title: json['title'] as String,
   slug: json['slug'] as String,
   description: json['description'] as String,
@@ -37,7 +37,7 @@ Article _$ArticleFromJson(Map<String, dynamic> json) => Article(
       .toList(),
   author: Author.fromJson(json['author'] as Map<String, dynamic>),
   favorited: json['favorited'] as bool,
-  favoritesCount: toInt(json['favoritesCount']),
+  favoritesCount: (json['favoritesCount'] as num).toInt(),
   sequentialCode: json['sequentialCode'] as String?,
   downloads: (json['downloads'] as List<dynamic>?)
       ?.map((e) => Download.fromJson(e as Map<String, dynamic>))
@@ -90,7 +90,7 @@ Map<String, dynamic> _$ArticleToJson(Article instance) => <String, dynamic>{
 
 ArticleListItem _$ArticleListItemFromJson(Map<String, dynamic> json) =>
     ArticleListItem(
-      id: toInt(json['id']),
+      id: (json['id'] as num).toInt(),
       title: json['title'] as String,
       slug: json['slug'] as String,
       description: json['description'] as String,
@@ -99,7 +99,7 @@ ArticleListItem _$ArticleListItemFromJson(Map<String, dynamic> json) =>
       updatedAt: json['updatedAt'] as String,
       mainImage: json['mainImage'] as String?,
       coverImage: json['coverImage'] as String?,
-      favoritesCount: toInt(json['favoritesCount']),
+      favoritesCount: (json['favoritesCount'] as num).toInt(),
       favorited: json['favorited'] as bool?,
       status: json['status'] as String?,
       engine: json['engine'] == null

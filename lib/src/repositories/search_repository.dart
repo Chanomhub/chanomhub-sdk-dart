@@ -2,6 +2,7 @@ import '../core/api_client.dart';
 import '../models/article.dart';
 import '../models/common.dart';
 import '../utils/fields.dart';
+import '../utils/parsers.dart';
 
 /// Search options for articles
 class SearchOptions {
@@ -45,25 +46,25 @@ class SearchRepository {
     final fieldsQuery = buildFieldsQuery(preset: opts.preset, fields: opts.fields);
 
     final List<String> filterParts = [];
-    filterParts.add('q: "\${query.replaceAll('"', '\\"')}"');
-    if (opts.tag != null) filterParts.add('tag: "\${opts.tag}"');
-    if (opts.platform != null) filterParts.add('platform: "\${opts.platform}"');
-    if (opts.category != null) filterParts.add('category: "\${opts.category}"');
-    if (opts.engine != null) filterParts.add('engine: "\${opts.engine}"');
+    filterParts.add('q: "${query.replaceAll('"', '\\"')}"');
+    if (opts.tag != null) filterParts.add('tag: "${opts.tag}"');
+    if (opts.platform != null) filterParts.add('platform: "${opts.platform}"');
+    if (opts.category != null) filterParts.add('category: "${opts.category}"');
+    if (opts.engine != null) filterParts.add('engine: "${opts.engine}"');
     if (opts.sequentialCode != null) {
-      filterParts.add('sequentialCode: "\${opts.sequentialCode}"');
+      filterParts.add('sequentialCode: "${opts.sequentialCode}"');
     }
-    if (opts.author != null) filterParts.add('author: "\${opts.author}"');
+    if (opts.author != null) filterParts.add('author: "${opts.author}"');
 
-    final filterArg = "filter: { \${filterParts.join(', ')} }";
+    final filterArg = "filter: { ${filterParts.join(', ')} }";
 
     final graphqlQuery = '''
       query SearchArticles {
         public {
-          articles(\$filterArg, limit: \${opts.limit}, offset: \${opts.offset}, status: PUBLISHED) {
-            \$fieldsQuery
+          articles($filterArg, limit: ${opts.limit}, offset: ${opts.offset}, status: PUBLISHED) {
+            $fieldsQuery
           }
-          articlesCount(\$filterArg)
+          articlesCount($filterArg)
         }
       }
     ''';

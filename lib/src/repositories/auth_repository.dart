@@ -10,7 +10,7 @@ class AuthRepository {
 
   /// Helper to get the default User-Agent if required by the API
   Map<String, String> get _defaultHeaders => {
-    'user-agent': 'ChanomhubFlutterSDK/1.0.0', // Standardize this later
+    'user-agent': 'ChanomhubFlutterSDK/1.0.3',
   };
 
   /// Register a new user.
@@ -44,6 +44,17 @@ class AuthRepository {
     );
 
     return UserResponse.fromJson(response.data);
+  }
+
+  /// Get current logged-in user profile
+  Future<UserDTO?> getMe() async {
+    try {
+      final response = await _apiClient.dio.get('/api/user');
+      if (response.data == null || response.data['user'] == null) return null;
+      return UserDTO.fromJson(response.data['user'] as Map<String, dynamic>);
+    } catch (e) {
+      return null;
+    }
   }
 
   /// Refresh the access token using a refresh token.

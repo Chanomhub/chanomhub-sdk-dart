@@ -2,6 +2,7 @@ import '../core/api_client.dart';
 import '../models/article.dart';
 import '../models/common.dart';
 import '../utils/fields.dart';
+import '../utils/parsers.dart';
 
 class ArticleFilter {
   final String? tag;
