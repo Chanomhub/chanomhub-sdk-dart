@@ -30,9 +30,5 @@ topics:
   - api-client
   - image-processing
 
-screenshots:
-  - description: "Article List Example"
-    path: screenshots/article_list.png
-
 flutter:
   # This package is a pure Dart/Flutter SDK wrapper
