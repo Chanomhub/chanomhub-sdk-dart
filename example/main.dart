@@ -1,54 +1,49 @@
 import 'package:chanomhub_flutter/chanomhub_flutter.dart';
 
 void main() async {
-  // Initialize the SDK with the base URL of the Chanomhub API
+  // 1. Initialize the SDK
   final sdk = ChanomhubClient(
     baseUrl: 'https://api.chanomhub.com',
     cdnUrl: 'https://imgproxy.chanomhub.com',
   );
 
-  print('===========================================');
-  print('🧪 Testing Chanomhub SDK 🧪');
-  print('===========================================');
+  print('🧪 Chanomhub SDK Test Drive 🧪');
 
   try {
-    print('\n[1] Testing Articles Module (getArticles)...');
-
-    // Fetch 5 latest articles
+    // 2. Fetch Latest Articles
+    print('\n[Fetching Articles...]');
     final response = await sdk.articles.getAllPaginated(
-      options: ArticleListOptions(limit: 5),
+      options: ArticleListOptions(limit: 3),
     );
 
-    print(
-      '✅ Successfully fetched ${response.items.length} articles (Total: ${response.total})',
-    );
+    print('✅ Found ${response.total} articles total.');
     for (var article in response.items) {
-      print('  📄 ${article.title} (Slug: ${article.slug})');
+      print('  📄 ${article.title}');
+      print('  🖼️ Image: ${article.mainImage}'); // Auto-transformed URL
     }
 
-    print('\n-------------------------------------------');
+    // 3. Search for a specific query
+    print('\n[Searching for "visual novel" with Thai tag...]');
+    final searchResult = await sdk.search.articles(
+      'visual novel',
+      options: SearchOptions(tag: 'Thai', limit: 2),
+    );
+    print('✅ Search found ${searchResult.items.length} results.');
 
-    print('\n[2] Testing Auth Module (login with invalid credentials)...');
-
-    // Attempt login with a dummy account to demonstrate error parsing
+    // 4. Test Error Handling (Invalid Login)
+    print('\n[Testing Error Handling (Invalid Login)...]');
     try {
       await sdk.auth.login(
-        email: 'test@example.com',
-        password: 'wrongpassword',
+        email: 'invalid@example.com',
+        password: 'wrong_password',
       );
-      print('❌ Login succeeded unexpectedly.');
-    } on UnauthorizedException catch (e) {
-      print('✅ Caught expected UnauthorizedException: ${e.message}');
-    } on ChanomhubException catch (e) {
-      print('⚠️ Caught other API error: ${e.message}');
+    } on AuthenticationException catch (e) {
+      print('✅ Caught expected exception: ${e.message} (Status: ${e.statusCode})');
     }
 
-    print('\n-------------------------------------------');
   } catch (e) {
-    print('❌ An error occurred during the test: $e');
+    print('❌ Unexpected error: $e');
   } finally {
-    // Clean up connections when done
-    print('\nCleaning up and disposing client...');
     sdk.dispose();
   }
 }
